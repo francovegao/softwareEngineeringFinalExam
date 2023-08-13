@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+
+<head>
+  <meta charset="UTF-8" >
+
+  <title>SalesSummary</title>
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-
+KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+          crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+          integrity="sha384-
+ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+          crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+          integrity="sha384-
+JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+          crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="/webjars/bootstrap/5.1.3/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+          integrity="sha384-
+JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+          crossorigin="anonymous"></script>
+
+  <style>
+    .pre-scrollable{
+      height: 500px;
+      overflow-y: scroll;
+    }
+    h1{
+      text-align: center;
+    }
+    .colorme{
+      background-color: aquamarine;
+    }
+  </style>
+</head>
+<body>
+<h1>Final Exam Set B</h1>
+<h1>Sales Summary Table</h1>
+
+<!--Table 1-->
+<div class="container">
+  <div class="card-body">
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Salesman Name</th><th>Washing Machine</th><th>Refrigerator</th><th>Music System</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="p:${listSalesman}">
+        <td th:text="${p.getName()}"></td>
+        <div th:switch="${p.getItem()}">
+        <td th:case="'Washing Machine'" th:text="${p.getAmount()}"></td>
+          <td th:case="*"></td>
+        </div>
+        <div th:switch="${p.getItem()}">
+          <td th:case="'Refrigerator'" th:text="${p.getAmount()}"></td>
+          <td th:case="*"></td>
+        </div>
+        <div th:switch="${p.getItem()}">
+          <td th:case="'Music System'" th:text="${p.getAmount()}"></td>
+          <td th:case="*"></td>
+        </div>
+
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<br>
+<!--Form-->
+<div class="container colorme p-3">
+  <form method="post" th:action="@{save}">
+  <div class="row g-8 align-items-center">
+
+    <div class="col-sm">
+      <label class="col-form-label">Salesman Name</label>
+    </div>
+    <div class="col-sm">
+      <input class="form-control" type="text" name="name"
+             th:value="${salesman.name}">
+      <span th:errors="${salesman.name}"></span>
+    </div>
+      <div class="col-sm">
+        <label class="col-form-label">Item Type</label>
+      </div>
+      <div class="col-sm">
+        <select class="form-control" name="item" th:value="${salesman.item}">
+          <option value="Washing Machine">Washing Machine</option>
+          <option value="Refrigerator">Refrigerator</option>
+          <option value="Music System">Music System</option>
+          <span th:errors="${salesman.item}"></span>
+        </select>
+
+
+      </div>
+      <div class="col-sm">
+        <label class="col-form-label">Sales Amount</label>
+      </div>
+      <div class="col-sm">
+        <input class="form-control" type="text" name="amount"
+               th:value="${salesman.amount}">
+        <span th:errors="${salesman.amount}"></span>
+      </div>
+      <div class="col-sm">
+        <label class="col-form-label">Date of Transaction</label>
+      </div>
+      <div class="col-sm">
+        <input class="form-control" type="date" name="dot"
+               th:value="${salesman.dot}">
+        <span th:errors="${salesman.dot}"></span>
+      </div>
+
+      <br>
+      <button type="submit" class="btn-primary btn-sm align-items-center" th:href="@{/index}" >Save</button>
+
+  </div>
+  </form>
+</div>
+
+
+<!--Table 2-->
+<div class="container mt-2 pre-scrollable">
+  <div class="card-body">
+<table class="table">
+  <thead>
+  <tr>
+    <th>Transaction Code</th><th>Salesman</th><th>Item</th><th>Amount</th><th>Transaction Date</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="p:${listSalesman}">
+    <td th:text="${p.getId()}"></td>
+    <td th:text="${p.getName()}"></td>
+    <td th:text="${p.getItem()}"></td>
+    <td th:text="${p.getAmount()}"></td>
+    <td th:text="${p.getDot()}"></td>
+    <td>
+      <a class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this record?')" th:href="@{delete(id=${p.id})}">
+        Delete
+      </a>
+    </td>
+    <td>
+      <a class="btn btn-success" th:href="@{editSalesman(id=${p.id})}">
+        Edit</a>
+    </td>
+  </tr>
+  </tbody>
+</table>
+  </div>
+</div>
+
+
+</body>
+</html>
